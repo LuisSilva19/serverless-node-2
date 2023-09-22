@@ -1,0 +1,22 @@
+{
+  "name": "serverless-node-2",
+  "version": "1.0.0",
+  "description": "Esta e a API base para o projeto do curso de Serverless da Alura.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@aws-sdk/client-s3": "^3.414.0",
+    "fast-csv": "^4.3.6",
+    "querystring": "^0.2.1"
+  },
+  "devDependencies": {
+    "serverless-disable-functions": "^1.0.0",
+    "serverless-offline": "^12.0.4",
+    "serverless-s3-local": "^0.7.2"
+  }
+}

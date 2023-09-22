@@ -1,0 +1,65 @@
+org: luistorm23
+app: serverless-framework
+service: serverless-framwork
+frameworkVersion: '3'
+
+resources:
+  extensions:
+    S3BucketAlunoscsvprod:
+      Properties:
+        CorsConfiguration:
+          CorsRules:
+            - AllowedMethods:
+                - POST
+                - PUT
+                - GET
+                - HEAD
+              AllowedOrigins:
+                - "*"
+              AllowedHeaders:
+                - "*"
+
+provider:
+  name: aws
+  runtime: nodejs18.x
+  iam:
+    role:
+      statements:
+        - Effect: Allow
+          Action: 
+            - s3:GetObject
+          Resource: 
+            - arn:aws:s3:::alunos-csv-prod/*
+
+functions:
+  cadastrarAlunos:
+    handler: serverless-framework/cadastro_batch/aws/index.cadastrarAlunos
+    events:
+      - s3:
+          bucket: alunos-csv-prod
+          event: s3:ObjectCreated:*
+          rules:
+            - suffix: .csv
+
+  simulandoUploadDoCsv:
+    handler: serverless-framework/cadastro_batch/local/index.simulandoUploadDoCsv
+    events:
+      - httpApi:
+          path: /alunos/batch
+          method: post
+    enabled: false
+
+  cadastrarAlunosDoBucketLocal:
+    handler: serverless-framework/cadastro_batch/local/index.cadastrarAlunosDoBucketLocal
+    events:
+      - s3:
+          bucket: alunos-csv-local
+          event: s3:ObjectCreated:*
+          rules:
+            - suffix: .csv
+    enabled: false
+
+plugins:
+  - serverless-offline
+  - serverless-s3-local
+  - serverless-disable-functions
